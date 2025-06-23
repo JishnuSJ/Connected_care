@@ -1,0 +1,57 @@
+{% extends "pat_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insurance</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Insurance</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>District</th>
+                <th>City</th>
+                <th>Contact</th>
+                <th>Insurance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in ins %}
+            <tr>
+                <td>{{ appointment.name }}</td>
+                <td>{{ appointment.address }}</td>
+                <td>{{ appointment.dist }}</td>
+                <td>{{ appointment.city }}</td>
+                <td>{{ appointment.contact }}</td>
+                <td><a href="{% url 'ins_pat_hosp_show' appointment.id %}" class="btn btn-primary">
+                    <button type="button">Click</button>
+                </a></td>
+               </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No prescriptions found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+{% endblock %}

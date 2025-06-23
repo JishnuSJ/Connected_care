@@ -1,0 +1,52 @@
+{% extends "pat_header.html" %}
+{% block content %}
+
+<h2>Submit a Complaint</h2>
+
+<div class="form-container">
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Patient Name:</label>
+        <input type="text" class="form-control" value="{{ patient.name }}" readonly>
+
+        <label>Patient ID:</label>
+        <input type="text" class="form-control" value="{{ patient.pr_number }}" readonly>
+
+        <label>Subject:</label>
+        {{ form.subject }}
+
+        <label>Message:</label>
+        {{ form.message }}
+
+        <button type="submit" class="submit-btn">Submit Complaint</button>
+    </form>
+</div>
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .submit-btn {
+        background: #dc3545;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .submit-btn:hover {
+        background: #c82333;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,181 @@
+{% extends "pat_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Insurance Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            {% comment %} background: linear-gradient(to right, #66d9ff, #0099cc); {% endcomment %}
+            color: white;
+            text-align: center;
+           
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            width: 40%;
+            margin: auto;
+            color: black;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        input, textarea {
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        button {
+            background: #007acc;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #005f99;
+        }
+    </style>
+</head>
+<body>
+<h2>Insurance Details for {{ ins_scheme.scheme_name }}</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Disease Name:</label>
+    <input type="text" name="disease_name" placeholder="Enter disease name" required>
+
+    <label>Select Doctor:</label>
+    <select name="doctor_name" required>
+        {% for doctor in doctors %}
+            <option value="{{ doctor.id }}">{{ doctor.name }}</option>  <!-- ✅ Select doctor dynamically -->
+        {% endfor %}
+    </select>
+
+    <label>Insurance Number:</label>
+    <input type="text" name="ins_number" placeholder="Enter insurance number" required>
+
+    <label>Details of Disease:</label>
+    <textarea name="details_disease" rows="5" placeholder="Enter disease details..." required></textarea>
+
+    <button type="submit">Submit Insurance Details</button>
+</form>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const validators = [];
+
+    function handleValidation(input, pattern, validMsg, invalidMsg) {
+        const feedback = document.createElement('small');
+        feedback.style.display = 'block';
+        input.parentNode.appendChild(feedback);
+
+        function validate() {
+            const value = input.value.trim();
+            if (!value) {
+                feedback.textContent = '❌ This field is required';
+                feedback.style.color = 'red';
+                return false;
+            } else if (!pattern.test(value)) {
+                feedback.textContent = '❌ ' + invalidMsg;
+                feedback.style.color = 'red';
+                return false;
+            } else {
+                feedback.textContent = '✅ ' + validMsg;
+                feedback.style.color = 'green';
+                return true;
+            }
+        }
+
+        input.addEventListener('input', validate);
+        validators.push(validate);
+    }
+
+    // ✅ Disease Name Validation (letters and spaces only)
+    const diseaseNameInput = document.querySelector('input[name="disease_name"]');
+    if (diseaseNameInput) {
+        handleValidation(
+            diseaseNameInput,
+            /^[A-Za-z ]+$/,
+            'Valid disease name',
+            'Disease name must contain only letters and spaces'
+        );
+    }
+
+    // ✅ Insurance Number Validation (10-15 alphanumeric characters)
+    const insNumberInput = document.querySelector('input[name="ins_number"]');
+    if (insNumberInput) {
+        handleValidation(
+            insNumberInput,
+            /^[A-Za-z0-9]{3,5}$/,
+            'Valid insurance number',
+            'Insurance number must be 3-5 alphanumeric characters'
+        );
+    }
+
+    // ✅ Disease Details Validation (minimum 10 characters)
+    const detailsDiseaseInput = document.querySelector('textarea[name="details_disease"]');
+    if (detailsDiseaseInput) {
+        detailsDiseaseInput.addEventListener('input', function () {
+            const value = detailsDiseaseInput.value.trim();
+            if (value.length < 10) {
+                detailsDiseaseInput.nextElementSibling.textContent = '❌ Details must be at least 10 characters';
+                detailsDiseaseInput.nextElementSibling.style.color = 'red';
+            } else {
+                detailsDiseaseInput.nextElementSibling.textContent = '✅ Valid details';
+                detailsDiseaseInput.nextElementSibling.style.color = 'green';
+            }
+        });
+    }
+
+    // Prevent form submission if validation fails
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+            validators.forEach(validateFn => {
+                if (!validateFn()) isValid = false;
+            });
+            if (!isValid) {
+                e.preventDefault();
+                alert("❌ Please fill all required fields and fix validation errors.");
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>
+{% endblock %}

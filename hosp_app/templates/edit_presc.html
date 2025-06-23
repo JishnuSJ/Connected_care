@@ -1,0 +1,69 @@
+{% extends "doc_header.html" %}
+{% block content %}
+
+<h1>Edit Prescription for {{ patient.name }}</h1>
+
+<div class="form-container">
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Medicine Name:</label>
+        {{ form.medicine_name }}
+
+        <label>Time of Day:</label>
+        <div class="checkbox-group">
+            {{ form.time_of_day }}
+        </div>
+
+        <label>Before or After Food:</label>
+        <div class="radio-group">
+            {{ form.before_or_after_food }}
+        </div>
+
+        <label>Start Date:</label>
+        {{ form.start_date }}
+
+        <label>End Date:</label>
+        {{ form.end_date }}
+
+        <button type="submit" class="submit-btn">💾 Save Prescription</button>
+    </form>
+</div>
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .checkbox-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .radio-group {
+        display: flex;
+        gap: 20px;
+    }
+
+    .submit-btn {
+        background: #4caf50;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .submit-btn:hover {
+        background: #45a049;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "pat_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Test Reports</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 900px;
+            margin-top: 40px;
+        }
+        .table-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+        }
+        .table tbody td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .pending {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        .paid {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .btn-payment {
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            padding: 6px 12px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-payment:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="table-container">
+            <h2 class="text-center font-weight-bold">Lab Test Reports</h2>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Test Name</th>
+                        <th>Lab Name</th>
+                        <th>Price</th>
+                        <th>Report</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for test in lab_tests %}
+                    <tr>
+                        <td>{{ test.test_details }}</td>
+                        <td>{{ test.lab_id.name }}</td>
+                        <td>₹{{ test.calculated_price }}</td>
+                        <td>
+                            {% if test.report_file %}
+                                <a href="{{ test.report_file.url }}" download class="btn btn-info">Download Report</a>
+                            {% else %}
+                                <span class="pending">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if test.status == 0 %}
+                                <span class="pending">Payment Pending</span>
+                            {% else %}
+                                <span class="paid">Paid</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if test.status == 0 %}
+                                <a href="{% url 'update_lab_payment' test.id %}">
+                                    <button class="btn-payment">Make Payment</button>
+                                </a>
+                            {% else %}
+                                <span class="paid">Paid</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center font-weight-bold text-danger">No lab tests found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

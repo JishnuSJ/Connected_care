@@ -1,0 +1,99 @@
+{% extends "pat_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Insurance Status Tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .status-container {
+            display: flex;
+            flex-direction: column; /* ✅ Vertical alignment */
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .status-step {
+            width: 250px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 50px;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .line {
+            width: 10px;  /* ✅ Vertical line */
+            height: 50px; /* ✅ Adjust height for spacing */
+            background-color: grey;
+        }
+
+        /* ✅ Status Colors */
+        .pending { background-color: grey; }
+        .verified { background-color: green; }
+        .rejected { background-color: red; }
+
+        .line.verified { background-color: green; }
+        .line.rejected { background-color: red; }
+
+        .claimed { background-color: green; }  /* ✅ Claim Paid */
+        .not-claimed { background-color: red; } /* ✅ Not Claimed */
+    </style>
+</head>
+<body>
+
+<h2>Insurance Status Tracking for {{ insurance_request.pat_id.name }}</h2>
+
+<div class="status-container">
+    <!-- ✅ Insurance Requested (Always Visible) -->
+    <div class="status-step verified">
+        📜 Insurance Requested
+    </div>
+    <div class="line verified"></div>
+
+    <!-- ✅ Hospital Verification -->
+    <div class="status-step {% if insurance_request.status == 1 %}verified{% elif insurance_request.status == 2 %}rejected{% else %}pending{% endif %}">
+        {% if insurance_request.status == 1 %}
+            ✅ Hospital Approved Insurance Request
+        {% elif insurance_request.status == 2 %}
+            ❌ Hospital Rejected Insurance Request
+        {% else %}
+            ⏳ Waiting for Hospital Verification
+        {% endif %}
+    </div>
+    <div class="line {% if insurance_request.status == 1 %}verified{% elif insurance_request.status == 2 %}rejected{% else %}pending{% endif %}"></div>
+
+    <!-- ✅ Final Insurance Decision -->
+    <div class="status-step {% if insurance_request.sa == 1 %}verified{% elif insurance_request.sa == 2 %}rejected{% else %}pending{% endif %}">
+        {% if insurance_request.sa == 1 %}
+            ✅ Insurance Approved
+        {% elif insurance_request.sa == 2 %}
+            ❌ Insurance Rejected
+        {% else %}
+            ⏳ Awaiting Final Decision
+        {% endif %}
+    </div>
+    <div class="line {% if insurance_request.sa == 1 %}verified{% elif insurance_request.sa == 2 %}rejected{% else %}pending{% endif %}"></div>
+
+    <!-- ✅ Claim Amount Status -->
+    <div class="status-step {% if insurance_request.ins_amt_status == 1 %}claimed{% else %}not-claimed{% endif %}">
+        {% if insurance_request.ins_amt_status == 1 %}
+            💰 Claim Amount Paid ₹{{ insurance_request.amt }}
+        {% else %}
+            ❌ Claim Not Transferred
+        {% endif %}
+    </div>
+    {% comment %} <div class="line {% if insurance_request.ins_amt_status == 1 %}claimed{% else %}not-claimed{% endif %}"></div> {% endcomment %}
+</div>
+
+</body>
+</html>
+{% endblock %}

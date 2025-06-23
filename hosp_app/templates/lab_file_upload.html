@@ -1,0 +1,77 @@
+{% extends "lab_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Lab Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #66d9ff, #0099cc);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            margin: auto;
+        }
+
+        label {
+            font-size: 18px;
+            color: #333;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 90%;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+        }
+
+        input[type="file"] {
+            background: #f2f2f2;
+        }
+
+        button {
+            background: #007acc;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #005f99;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Upload Lab Report</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="repo">Report</label>
+
+    
+    <textarea name="report_given" rows="5" cols="50" placeholder="Enter lab report details...">{{ labtest.report_given }}</textarea>
+    <button type="submit">Upload Report</button>
+</form>
+
+</body>
+</html>
+{% endblock %}

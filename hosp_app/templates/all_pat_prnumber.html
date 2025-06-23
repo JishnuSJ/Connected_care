@@ -1,0 +1,153 @@
+{% extends "doc_header.html" %}
+{% block content %}
+<div class="search-container">
+    <form method="GET">
+        <input type="text" name="pr_number" class="search-input" placeholder="Enter Patient Registration Number">
+        <button type="submit" class="search-btn">Search</button>
+    </form>
+</div>
+
+{% if patient %}
+    <div class="card">
+        <h2 class="card-title">Patient Details</h2>
+        <p><strong>Name:</strong> {{ patient.name }}</p>
+        <p><strong>Address:</strong> {{ patient.address }}</p>
+        <p><strong>Gender:</strong> {{ patient.gender }}</p>
+        <p><strong>Age:</strong> {{ patient.age }}</p>
+        <p><strong>Contact:</strong> {{ patient.contact }}</p>
+    </div>
+<div class="card">
+    <h2 class="card-title">Prescription Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Patient Name</th>
+                <th>Hospital</th>
+                <th>Doctor</th>
+                <th>Medicine Name</th>
+                <th>Before/After Food</th>
+                <th>Time of Day</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Additional Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+                {% if appointment.prescriptions.all %}
+                    {% for prescription in appointment.prescriptions.all %}
+                    <tr>
+                        {% if forloop.first %}
+                            <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.curr_date|date:"Y-m-d" }}</td>
+                            <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.pat_id.name }}</td>
+                            <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.hosp_id.name }}</td>
+                            <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.doc_id.name }}</td>
+                        {% endif %}
+                        
+                        <td>{{ prescription.medicine_name }}</td>
+                        <td>{{ prescription.before_or_after_food }}</td>
+                        <td>{{ prescription.time_of_day }}</td>
+                        <td>{{ prescription.start_date|date:"Y-m-d" }}</td>
+                        <td>{{ prescription.end_date|date:"Y-m-d" }}</td>
+                        <td>{{ prescription.additional_notes }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="10" class="no-data">No prescriptions found.</td>
+                    </tr>
+                {% endif %}
+            {% empty %}
+                <tr>
+                    <td colspan="10" class="no-data">No appointment details found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+    <div class="card">
+        <h2 class="card-title">Lab Reports</h2>
+        {% for lab_test in lab_tests %}
+            <p><strong>Test Details:</strong> {{ lab_test.test_details }}</p>
+            <p><strong>Report Given:</strong> {{ lab_test.report_given }}</p>
+            {% if lab_test.report_file %}
+                <p><a href="{{ lab_test.report_file.url }}" target="_blank">View Lab Report</a></p>
+            {% endif %}
+        {% empty %}
+            <p>No lab reports found.</p>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Insurance Details</h2>
+        {% for insurance in insurance_details %}
+            <p><strong>Disease Name:</strong> {{ insurance.disease_name }}</p>
+            <p><strong>Insurance Number:</strong> {{ insurance.ins_num }}</p>
+            <p><strong>Insurance Status:</strong> {% if insurance.status == 1 %}✅ Approved{% else %}❌ Not Approved{% endif %}</p>
+        {% empty %}
+            <p>No insurance details found.</p>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="error-card">
+        <p>No patient found with this registration number.</p>
+    </div>
+{% endif %}
+
+<style>
+    .search-container {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .search-input {
+        padding: 10px;
+        width: 40%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .search-btn {
+        padding: 10px 15px;
+        background: #007acc;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .search-btn:hover {
+        background: #005f99;
+    }
+
+    .card {
+        width: 60%;
+        margin: 20px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: left;
+    }
+
+    .card-title {
+        font-size: 20px;
+        color: #007acc;
+        margin-bottom: 10px;
+    }
+
+    .error-card {
+        width: 60%;
+        margin: auto;
+        padding: 20px;
+        background: #ffdddd;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: bold;
+        color: red;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "ins_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verified Insurance Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #007acc;
+        }
+
+        .timeline {
+            width: 60%;
+            margin: auto;
+            position: relative;
+        }
+
+        .event {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .circle {
+            width: 20px;
+            height: 20px;
+            background: #007acc;
+            border-radius: 50%;
+            position: absolute;
+            left: -10px;
+        }
+
+        .content {
+            flex: 1;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .details {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h2>Verified Patient Insurance Details</h2>
+
+    <div class="timeline">
+        {% for request in verifyed %}
+        <div class="event">
+            <div class="circle"></div>
+            <div class="content">
+                <div class="title">Patient: {{ request.pat_id.name }}</div>
+                <div class="details">🏥 Hospital: {{ request.hosp_id.name }}</div>
+                <div class="details">👨‍⚕️ Doctor: {{ request.doc_name }}</div>
+                <div class="details">🩺 Disease: {{ request.disease_name }}</div>
+                <div class="details">📄 Insurance Number: {{ request.ins_num }}</div>
+                <div class="details">🕒 Request Time: {{ request.curr_date }}</div>
+           
+
+                {% if request.file %}
+                    <div class="details">📂 Hospital Notes: <a href="{{ request.file.url }}"  download>Download</a></div>
+                {% else %}
+                    <p class="details">📂 No hospital notes uploaded.</p>
+                {% endif %}
+
+                <!-- ✅ Status Buttons -->
+                <div class="actions">
+                    {% if request.sa == 0 %}
+                        <a href="{% url 'ins_accept' request.id 'accept' %}" class="btn btn-success">Accept</a>
+                        <a href="{% url 'ins_accept' request.id 'reject' %}" class="btn btn-danger">Reject</a>
+                    {% elif request.sa == 1 %}
+                        <p class="verified">✅ Accepted</p>
+
+                        {% if request.ins_amt_status == 0 %}
+                            <a href="{% url 'claim_amt_tr' request.id %}" class="btn btn-warning">Claim Amount Transfer</a>
+                        {% elif request.ins_amt_status == 1 %}
+                            <p class="verified">💰 Claim Amount Paid</p>
+                        {% endif %}
+                    {% elif request.sa == 2 %}
+                        <p class="rejected">❌ Rejected</p>
+                 {% endif %}
+                </div>
+
+            </div>
+        </div>
+        
+        {% empty %}
+        <p>No verified insurance requests found.</p>
+        {% endfor %}
+    </div>
+    
+</body>
+</html>
+{% endblock %}

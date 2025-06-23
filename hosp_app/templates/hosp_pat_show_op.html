@@ -1,0 +1,72 @@
+{% extends "pat_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>show hosp</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        
+    </style>
+</head>
+<body>
+
+<h2>Hospital list</h2>
+<form method="get">
+{%csrf_token%}
+<input type="text" name="search" placeholder="Search here..." />
+<button type="submit">Search</button>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>Hospital_Name</th>
+            <th>Address</th>
+            <th>District</th>
+            <th>City</th>
+            <th>Contact </th>
+            <th>email id</th>
+            <th>Hospital</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in hosp_show_pat %}
+        <tr>
+            <td>{{i.name}}</td>
+            <td>{{i.address}}</td>
+            <td>{{i.dist}}</td>
+            <td>{{i.city}}</td>
+            <td>{{i.contact}}</td>
+            
+            <td>{{i.loginid.email}}</td>
+            <td><button type="submit"> <a href="doc_pat_show_op/{{i.id}}"/>Click</button></td>
+        </tr>
+       
+        {% endfor %}
+    </tbody> 
+</table>
+
+
+</body>
+</html>
+{% endblock %}

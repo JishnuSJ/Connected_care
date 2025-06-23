@@ -1,0 +1,46 @@
+{% extends "pat_header.html" %}
+{% block content %}
+<h2>Insurance Requests for {{ patient.name }}</h2>
+
+<table border="1" style="width: 100%; border-collapse: collapse; text-align: left;">
+    <thead>
+        <tr style="background: #007acc; color: white;">
+            <th>Disease Name</th>
+            <th>Doctor</th>
+            <th>Insurance Number</th>
+            <th>Details</th>
+            <th>Hospital Approval</th>
+            <th>Final Insurance Status</th>
+            <th>Track Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in insurance_requests %}
+        <tr>
+            <td>{{ request.disease_name }}</td>
+            <td>{{ request.doc_name }}</td>
+            <td>{{ request.ins_num }}</td>
+            <td>{{ request.details }}</td>
+            <td>
+                {% if request.status == 0 %} 🟠 Hospital Under Verification
+                {% elif request.status == 1 %} ✅ Approved by Hospital
+                {% elif request.status == 2 %} ❌ Rejected by Hospital
+                {% endif %}
+            </td>
+            <td>
+                {% if request.sa == 0 %} 🟠 Under Verification in Insurance Module
+                {% elif request.sa == 1 %} ✅ Verified by Insurance Team
+                {% elif request.sa == 2 %} ❌ Rejected by Insurance
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'pat_ins_track' request.id %}" class="btn btn-primary">Track Request ➡️</a>
+            </td>
+            
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" style="text-align: center;">No insurance requests found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

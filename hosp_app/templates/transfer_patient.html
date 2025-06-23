@@ -1,0 +1,30 @@
+{% extends "doc_header.html" %}
+{% block content %}
+<h2>Select a Doctor for Transfer</h2>
+<form method="POST">
+    {% csrf_token %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Doctor Name</th>
+                <th>Specialization</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doctor in doctors %}
+            <tr>
+                <td>{{ doctor.name }}</td>
+                <td>{{ doctor.specification }}</td>
+                <td>
+                    <button type="submit" name="transfer_doc_id" value="{{ doctor.id }}" class="btn btn-success">
+                        Transfer to {{ doctor.name }}
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+{% endblock %}

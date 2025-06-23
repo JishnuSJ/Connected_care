@@ -1,0 +1,180 @@
+{% extends "ins_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Form</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9; /* ✅ Changed to a light neutral white */
+            color: #333; /* ✅ Improved text contrast */
+            text-align: center;
+            padding: 20px;
+            min-height: 100vh; /* ✅ Allows scrolling */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Form Container */
+        form {
+            background: #ffffff; /* ✅ Solid white form */
+            padding: 30px;
+            border-radius: 10px;
+            width: 40%;
+            margin: auto;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            color: #333; /* ✅ Ensures dark text contrast */
+        }
+        
+        /* Labels */
+        label {
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        
+        /* Inputs & Selection */
+        input, select {
+            padding: 10px;
+            width: 90%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        
+        /* Radio Buttons */
+        .radio-group {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+        
+        /* Button Styling */
+        button {
+            background: #444; /* ✅ Changed button to neutral dark */
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        button:hover {
+            background: #222;
+        }
+
+    </style>
+</head>
+<body>
+
+<h2>Payment Details</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <label>Category:</label>
+    <input type="text" name="category" placeholder="Enter scheme name">
+
+    <label>Scheme Name:</label>
+    <input type="text" name="scheme_name" placeholder="Enter scheme name">
+
+    <label>Details:</label>
+    <input type="text" name="details" placeholder="Enter payment details">
+
+    <label>Payment Type:</label>
+    <div class="radio-group">
+        <input type="radio" name="payment_type" value="cash" onclick="toggleAmount(true)"> Cash Payment
+        <input type="radio" name="payment_type" value="cashless" onclick="toggleAmount(false)"> Cashless Payment
+    </div>
+
+    <label>Amount:</label>
+    <input type="text" id="amount" name="amount" placeholder="Enter amount" disabled>
+
+    <button type="submit">Submit Payment</button>
+</form>
+
+<script>
+    function toggleAmount(enable) {
+        document.getElementById("amount").disabled = !enable;
+    }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const validators = [];
+
+    function handleValidation(input, pattern, validMsg, invalidMsg) {
+        const feedback = document.createElement('small');
+        feedback.style.display = 'block';
+        input.parentNode.appendChild(feedback);
+
+        function validate() {
+            const value = input.value.trim();
+            if (!value) {
+                feedback.textContent = '❌ This field is required';
+                feedback.style.color = 'red';
+                return false;
+            } else if (!pattern.test(value)) {
+                feedback.textContent = '❌ ' + invalidMsg;
+                feedback.style.color = 'red';
+                return false;
+            } else {
+                feedback.textContent = '✅ ' + validMsg;
+                feedback.style.color = 'green';
+                return true;
+            }
+        }
+
+        input.addEventListener('input', validate);
+        validators.push(validate);
+    }
+
+    // ✅ Category Validation (letters and spaces only)
+    const categoryInput = document.querySelector('input[name="category"]');
+    if (categoryInput) {
+        handleValidation(
+            categoryInput,
+            /^[A-Za-z ]+$/,
+            'Valid category name',
+            'Category name must contain only letters and spaces'
+        );
+    }
+
+    // ✅ Scheme Name Validation (letters and spaces only)
+    const schemeNameInput = document.querySelector('input[name="scheme_name"]');
+    if (schemeNameInput) {
+        handleValidation(
+            schemeNameInput,
+            /^[A-Za-z ]+$/,
+            'Valid scheme name',
+            'Scheme name must contain only letters and spaces'
+        );
+    }
+
+    // ✅ Details Validation (minimum 10 characters)
+    const detailsInput = document.querySelector('input[name="details"]');
+    if (detailsInput) {
+        detailsInput.addEventListener('input', function () {
+            const value = detailsInput.value.trim();
+            if (value.length < 10) {
+                detailsInput.nextElementSibling.textContent = '❌ Details must be at least 10 characters';
+                detailsInput.nextElementSibling.style.color = 'red';
+            } else {
+                detailsInput.nextElementSibling.textContent = '✅ Valid details';
+                detailsInput.nextElementSibling.style.color = 'green';
+            }
+        });
+    }
+
+});
+</script>
+
+</body>
+</html>
+
+{% endblock %}

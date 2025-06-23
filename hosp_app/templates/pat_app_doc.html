@@ -1,0 +1,81 @@
+{% extends "doc_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Appointment Details</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h2>Appointment Details</h2>
+
+<form method="get">
+    {% csrf_token %}
+    <input type="text" name="search" placeholder="Search here..." />
+    <button type="submit">Search</button>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Patient ID</th>
+            <th>Patient Name</th>
+            <th>Doctor Name</th>
+            <th>Hospital Name</th>
+            <th>Appointment Date</th>
+            <th>Appointment Time</th>
+            <th>Prescription</th>
+            <th>Video conference</th>
+            <th>Lab Test</th>
+            <th>Transfer patient</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in pat_show %}
+        <tr>
+            <td>{{ i.pat_id.pr_number }}</td> 
+            <td>{{ i.pat_id.name }}</td> 
+            <td>{{ i.doc_id.name }}</td> 
+            <td>{{ i.hosp_id.name }}</td> 
+            <td>{{ i.book_date }}</td> 
+            <td>{{ i.book_time }}</td> 
+            <td><a href="{% url 'presc_add' i.id%}">Prescription</a></td>
+            {% if i.appointment_type == "Online" %}
+                <td><a href="{% url 'web_con' i.id %}" class="btn btn-primary">Connect</a></td>
+            {% else %}
+                <td>Offline Appointment</td>
+            {% endif %}
+                    
+            <td><a href="{% url 'lab_doc_show' i.id%}">Lab Test</a></td>
+            <td><a href="{% url 'transfer_patient' i.id %}" class="btn btn-warning">Transfer Patient</a></td>
+
+            {% comment %} <td><a href="{% url 'transfer_patient' i.id %}" class="btn btn-warning">Transfer</a></td>  {% endcomment %}
+
+        </tr>
+        {% empty %}         
+        <tr>
+            <td colspan="5">No appointments found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>
+{% endblock %}

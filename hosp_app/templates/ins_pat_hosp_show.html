@@ -1,0 +1,75 @@
+{% extends "pat_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>show hosp</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        
+    </style>
+</head>
+<body>
+
+<h2>Hospital list</h2>
+<form method="get">
+{%csrf_token%}
+<input type="text" name="search" placeholder="Search here..." />
+<button type="submit">Search</button>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Scheme_name</th>
+            <th>Details</th>
+            <th>Type</th>
+            <th>Amount </th>
+            
+            <th>Hospital</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in insurance_schemes %}
+        <tr>
+            <td>{{i.category}}</td>
+            <td>{{i.scheme_name}}</td>
+            <td>{{i.details}}</td>
+            <td>{{i.type}}</td>
+            <td>{{i.amount}}</td>
+            <td>
+                <a href="../ins_details_pat/{{i.id}}/{{hospital.id}}" class="btn btn-primary">
+                    Click
+                </a>
+            
+            </td>
+        </tr>
+       
+        {% endfor %}
+    </tbody> 
+</table>
+
+
+</body>
+</html>
+{% endblock %}

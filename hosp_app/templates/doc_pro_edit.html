@@ -1,0 +1,217 @@
+{% extends "doc_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Doctor Profile</title>
+
+    <style>
+        /* ✅ Center the form */
+        .signup-form {
+            width: 50%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .input-label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .submit-btn {
+            background: #007acc;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #005f99;
+        }
+    </style>
+</head>
+<body>
+
+<div class="signup-form">
+    <h2 class="form-title">Update Doctor Profile</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="input-group">
+            <label class="input-label">Profile Image:</label>
+            {% if form1.instance.uploaded_image %}
+                <img src="{{ form1.instance.uploaded_image.url }}" alt="Profile Image" class="profile-img">
+            {% endif %}
+            <input type="file" name="uploaded_image" class="input">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Full Name:</label>
+            <input type="text" name="name" class="input" value="{{ form1.instance.name }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Gender:</label>
+            <select name="gender" class="input">
+                <option value="Male" {% if form1.instance.gender == "Male" %}selected{% endif %}>Male</option>
+                <option value="Female" {% if form1.instance.gender == "Female" %}selected{% endif %}>Female</option>
+                <option value="Other" {% if form1.instance.gender == "Other" %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Age:</label>
+            <input type="number" name="age" class="input" value="{{ form1.instance.age }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Specialization:</label>
+            <input type="text" name="specification" class="input" value="{{ form1.instance.specification }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Years of Experience:</label>
+            <input type="number" name="exp" class="input" value="{{ form1.instance.exp }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Qualification:</label>
+            <input type="text" name="qualif" class="input" value="{{ form1.instance.qualif }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Contact Number:</label>
+            <input type="tel" name="contact" class="input" value="{{ form1.instance.contact }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Consultation Fee:</label>
+            <input type="number" name="con_fee" class="input" value="{{ form1.instance.con_fee }}" disabled>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Email:</label>
+            <input type="email" name="email" class="input" value="{{ form2.instance.email }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Affiliated Hospital:</label>
+            <select name="hosp_name" class="input">
+                {% for hospital in form1.hosp_name.field.queryset %}
+                    <option value="{{ hospital.id }}" {% if form1.instance.hosp_name == hospital %}selected{% endif %}>{{ hospital.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Update Profile</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const validators = [];
+  
+    function handleValidation(input, pattern, validMsg, invalidMsg) {
+        const feedback = document.createElement('small');
+        feedback.style.display = 'block';
+        input.parentNode.appendChild(feedback);
+  
+        function validate() {
+            const value = input.value.trim();
+            if (!value) {
+                feedback.textContent = '❌ This field is required';
+                feedback.style.color = 'red';
+                return false;
+            } else if (!pattern.test(value)) {
+                feedback.textContent = '❌ ' + invalidMsg;
+                feedback.style.color = 'red';
+                return false;
+            } else {
+                feedback.textContent = '✅ ' + validMsg;
+                feedback.style.color = 'green';
+                return true;
+            }
+        }
+  
+        input.addEventListener('input', validate);
+        validators.push(validate);
+    }
+
+    const nameInput = document.querySelector('input[name="name"]');
+    if (nameInput) {
+        handleValidation(nameInput, /^[A-Za-z ]+$/, 'Valid name', 'Name must contain only letters and spaces');
+    }
+
+    const contactInput = document.querySelector('input[name="contact"]');
+    if (contactInput) {
+        handleValidation(contactInput, /^\d{10}$/, 'Valid phone number', 'Enter a valid 10-digit phone number');
+    }
+
+    const emailInput = document.querySelector('input[name="email"]');
+    if (emailInput) {
+        handleValidation(emailInput, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Valid email address', 'Enter a valid email address');
+    }
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+            validators.forEach(validateFn => {
+                if (!validateFn()) isValid = false;
+            });
+            if (!isValid) {
+                e.preventDefault();
+                alert("❌ Please fill all required fields and fix validation errors.");
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>
+{% endblock %}

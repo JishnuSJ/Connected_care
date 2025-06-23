@@ -1,0 +1,119 @@
+{% extends "pat_header.html" %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Prescriptions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .table-container {
+            max-width: 90%;
+            margin: auto;
+            overflow-x: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007acc;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📋 My Prescriptions</h1>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Patient Name</th>
+                    <th>Hospital</th>
+                    <th>Doctor</th>
+                    <th>Medicine Name</th>
+                    <th>Before/After Food</th>
+                    <th>Time of Day</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                    {% for prescription in appointment.prescriptions.all %}
+                    <tr>
+                        {% if forloop.first %}
+                            <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.curr_date|date:"Y-m-d" }}</td>
+                            <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.pat_id.name }}</td>
+                            <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.hosp_id.name }}</td>
+                            <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.doc_id.name }}</td>
+                        {% endif %}
+                        
+                        <td>{{ prescription.medicine_name }}</td>
+                        <td>{{ prescription.before_or_after_food }}</td>
+                        <td>{{ prescription.time_of_day }}</td>
+                        <td>{{ prescription.start_date|date:"Y-m-d" }}</td>
+                        <td>{{ prescription.end_date|date:"Y-m-d" }}</td>
+                        
+                    </tr>
+                    {% endfor %}
+                {% empty %}
+                    <tr>
+                        <td colspan="10" class="no-data">No prescriptions found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
+
+{% endblock %}

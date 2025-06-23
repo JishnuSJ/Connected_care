@@ -1,0 +1,78 @@
+{% extends "doc_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transferred Patients</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+        .table-container {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+            padding: 20px;
+        }
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+        }
+        .table tbody td {
+            text-align: center;
+        }
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .empty-message {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #888;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="table-container">
+            <h2 class="text-center font-weight-bold">Transferred Patients</h2>
+            <p class="text-center">Welcome, <strong>Dr. {{ doctor.name }}</strong></p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Previous Doctor</th>
+                        <th>Transfer Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transfer in transferred_patients %}
+                    <tr>
+                        <td>{{ transfer.pat_id.name }}</td>
+                        <td>{{ transfer.doc_id.name }}</td>
+                        <td>{{ transfer.transfer_date }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="empty-message">No transferred patients found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

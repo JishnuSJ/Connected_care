@@ -1,0 +1,180 @@
+{% extends "pat_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Patient Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+  
+  <style>
+    .signup-form {
+        width: 50%;
+        margin: auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .input-group {
+        margin-bottom: 15px;
+        width: 100%;
+    }
+
+    .input-label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .readonly-input {
+        background: #f4f4f4;
+        color: #666;
+        cursor: not-allowed;
+    }
+
+    .submit-btn {
+        background: #007acc;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        width: 100%;
+        transition: 0.3s;
+    }
+
+    .submit-btn:hover {
+        background: #005f99;
+    }
+  </style>
+</head>
+<body>
+
+<div class="signup-form">
+    <h2 class="form-title">Update Patient Profile</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- ✅ Patient Registration Number (Non-editable) -->
+        <div class="input-group">
+            <label class="input-label">Patient Registration Number:</label>
+            <input type="text" name="pr_number" value="{{ form1.instance.pr_number }}" class="input readonly-input" readonly>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Full Name:</label>
+            <input type="text" name="name" class="input" value="{{ form1.instance.name }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Address:</label>
+            <input type="text" name="address" class="input" value="{{ form1.instance.address }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Gender:</label>
+            <select name="gender" class="input">
+                <option value="Male" {% if form1.instance.gender == "Male" %}selected{% endif %}>Male</option>
+                <option value="Female" {% if form1.instance.gender == "Female" %}selected{% endif %}>Female</option>
+                <option value="Other" {% if form1.instance.gender == "Other" %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Age:</label>
+            <input type="number" name="age" class="input" value="{{ form1.instance.age }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Contact:</label>
+            <input type="tel" name="contact" class="input" value="{{ form1.instance.contact }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Email:</label>
+            <input type="email" name="email" class="input" value="{{ form2.instance.email }}" required>
+        </div>
+
+        <button type="submit" class="submit-btn">Update Profile</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const validators = [];
+
+    function handleValidation(input, pattern, validMsg, invalidMsg) {
+        const feedback = document.createElement('small');
+        feedback.style.display = 'block';
+        input.parentNode.appendChild(feedback);
+
+        function validate() {
+            const value = input.value.trim();
+            if (!value) {
+                feedback.textContent = '❌ This field is required';
+                feedback.style.color = 'red';
+                return false;
+            } else if (!pattern.test(value)) {
+                feedback.textContent = '❌ ' + invalidMsg;
+                feedback.style.color = 'red';
+                return false;
+            } else {
+                feedback.textContent = '✅ ' + validMsg;
+                feedback.style.color = 'green';
+                return true;
+            }
+        }
+
+        input.addEventListener('input', validate);
+        validators.push(validate);
+    }
+
+    const nameInput = document.querySelector('input[name="name"]');
+    if (nameInput) {
+        handleValidation(nameInput, /^[A-Za-z ]+$/, 'Valid name', 'Name must contain only letters and spaces');
+    }
+
+    const contactInput = document.querySelector('input[name="contact"]');
+    if (contactInput) {
+        handleValidation(contactInput, /^\d{10}$/, 'Valid phone number', 'Enter a valid 10-digit phone number');
+    }
+
+    const emailInput = document.querySelector('input[name="email"]');
+    if (emailInput) {
+        handleValidation(emailInput, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Valid email address', 'Enter a valid email address');
+    }
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+            validators.forEach(validateFn => {
+                if (!validateFn()) isValid = false;
+            });
+            if (!isValid) {
+                              e.preventDefault();
+                alert("❌ Please fill all required fields and fix validation errors.");
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>
+{% endblock %}
+

@@ -1,0 +1,253 @@
+{% load static %}
+<!DOCTYPE html>
+<!--[if IE 8 ]><html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<!--<![endif]-->
+
+
+<!-- Mirrored from themesflat.co/html/labaidhtml/home2.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 28 Apr 2025 05:38:56 GMT -->
+<head>
+    <!-- Basic Page Needs -->
+    <meta charset="utf-8">
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+    <title>Labaid</title>
+
+    <meta name="author" content="themesflat.com">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Theme Style -->
+    <link rel="stylesheet" type="text/css" href="{% static 'lab/assets/css/style.css' %}">
+
+    <!-- Reponsive -->
+    <link rel="stylesheet" type="text/css" href="{% static 'lab/assets/css/responsive.css' %}">
+
+    <!-- Favicon and Touch Icons  -->
+    <link rel="shortcut icon" href="{% static 'lab/assets/images/logo/Vector-lg.png' %}">
+    <link rel="apple-touch-icon-precomposed" href="{% static 'lab/assets/images/logo/Logo.png' %}">
+
+</head>
+
+
+<body class="body header-fixed home2 home counter-scroll">
+
+    <!-- preloade -->
+    {% comment %} <div class="preload preload-container">
+        <div class="preload-logo"></div>
+    </div> {% endcomment %}
+    <!-- /preload -->
+
+    <div id="wrapper">
+        <div id="page" class="clearfix">
+            <div id="top-bar-bt">
+                <div class="container-TFL">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="inner flex-one">
+                                <div id="site-logo-left" class="clearfix">
+                                    <div id="site-logo-inner">
+                                        <a href="index.html" rel="home" class="main-logo">
+                                            <img id="logo_header" src="{% static 'lab/assets/images/logo/Logo.png' %}" alt="img"
+                                                width="146" height="65">
+                                        </a>
+                                    </div>
+                                </div>
+                                {% comment %} <div class="top-bar-content">
+                                    <h5 class="content-center"><a class="text-color-3" href="#">Insurance </a></h5>
+                                    <h5 class="content-center"><a class="text-color-3 active" href="service-page.html">Provider
+                                            Services</a>
+                                    </h5>
+                                    <h5 class="content-center"><a class="text-color-3" href="#">Accreditation</a></h5>
+                                </div>
+                                <div class="top-bar-right bt">
+
+                                    <h6 class="content-right"><a class="text-color-4 bf" href="cart.html">My Cart</a>
+                                    </h6> {% endcomment %}
+
+                                </div>
+                                <div class="flat-button-top">
+                                    <a href="logout" class="sc-button btn-1"><span>Logout
+                                        </span></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <header id="header_main" class="header_1 js-header">
+                <div class="container-TFL">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="site-header-inner">
+                                <div class="wrap-box relative">
+                                    <div class="logo-mobile"><img src="{% static 'lab/assets/images/logo/Logo-footer.png' %}" alt="Labaid"></div>
+                                    <div class="mobile-button"><span></span></div><!-- /.mobile-button -->
+                                    <nav id="main-nav" class="main-nav">
+                                        <ul id="menu-primary-menu" class="menu">
+                                            <li><a href="ins_scheme">Schemes</a></li>
+                                            <li><a href="verified_list">Hospital verifyed</a></li>
+                                            <li><a href="inc_pro_edit">Profile</a></li>
+                                            
+
+                                            
+                                            <li class="menu-item">
+                                                <a href="contact.html">Contact Us</a>
+                                            </li>
+                                        </ul>
+                                    </nav><!-- /#main-nav -->
+                                    <div class="social">
+                                        {% comment %} <div class="wrap-social">
+                                            <ul>
+                                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                                                <li><a href="#"><i class="fab fa-pinterest-p"></i></a></li>
+                                                <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+
+                                            </ul>
+                                        </div> {% endcomment %}
+                                        <div class="wrap-call">
+                                            <h4>Call Me <a href="#">9633723315</a></h4>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>            
+            {% block content %}
+            {% endblock %}
+                       <!-- Footer -->
+        <footer id="footer" class="clearfix">
+            <div class="container-TFL">
+                <div class="row">
+                    <div class="col-lg-3 col-md-12 col-12">
+                        <div class="widget widget-logo">
+                            <div class="logo-footer" id="logo-footer">
+                                <a href="index.html">
+                                    <img id="logo_footer" src="{% static 'lab/assets/images/logo/Logo-footer.png' %}" alt="Labaid">
+                                </a>
+                            </div>
+                            <p class="sub-widget-logo">TIn modern healthcare, laboratories play a vital role in diagnosing diseases, monitoring patient health, and supporting medical decisions. Connected Care seamlessly integrates lab services within its ecosystem, ensuring fast and accurate test processing while maintaining transparency between doctors, hospitals, and patients.</p>
+                        </div>
+                        <div class="widget-social style-1 mg-t32">
+                            <ul>
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a>
+                                </li>
+                                <li class="style-2"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                <li class="style-2"><a href="#"><i class="fab fa-instagram"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-5 ">
+                        <div class="widget widget-menu style-1">
+                            <h5 class="title-widget">About Us</h5>
+                            <ul>
+                                <li><a href="about.html">Corporate Business</a></li>
+                                <li><a href="about.html">SEO Agency</a></li>
+                                <li><a class="active" href="testimonials.html"> Testimonial </a></li>
+                                <li>
+                                    <a href="careerspage.html"> Company Report </a>
+                                </li>
+                                <li><a href="service-page.html"> Marketing </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-7 ">
+                        <div class="widget widget-menu style-2">
+                            <h5 class="title-widget">Usefull Links</h5>
+                            <ul>
+                                <li><a href="#">Play Store</a></li>
+                                <li><a href="#">Social Media</a></li>
+                                <li><a href="#">App Development</a>
+                                </li>
+                                <li><a href="faq.html">Our Faq</a></li>
+                                <li><a href="#">Privace Policy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-5">
+                        <div class="widget widget-menu fl-st-3">
+                            <h5 class="title-widget">Information</h5>
+                            <ul>
+                                <li><a href="mailto:info.indro@gmail.com">info.indro@gmail.com
+                                    </a></li>
+                                <li><a href="tel:(+55)-669988">Call Me (+55) -66 99 88</a></li>
+                                <li>
+                                    <p> Sydney Harbour Bridge from
+                                        Circular City of Sydney, Australia.
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-7 ">
+                        <div class="widget widget-menu style-4">
+                            <h5 class="title-widget">Free Consultation</h5>
+                            <p>Book Your Free It Consultation.</p>
+                            <div class="form-subcribe">
+                                <form id="subscribe-form" action="#" method="GET" accept-charset="utf-8"
+                                    class="form-submit">
+                                    <input name="email" value="" class="email" type="email"
+                                        placeholder="Enter Your Newslatter..." required="">
+                                </form>
+                            </div>
+                            <div class="content-submit">
+                                <a href="contact.html"> Help center</a>
+                                <a href="#">Privacy Policy</a>
+                                <a class="style" href="#">career</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer><!-- /#footer -->
+            <div id="bottom" class="bottom-type1 position-relative">
+                <div class="container-TFL">
+                    <div class="bottom-wrap text-center">
+                        <div id="wrap-bottom">
+                            <span> © Copyright 2022</span>
+                            <a href="#">themesflat </a><span class="license">- All
+                                Rights
+                                Reserved.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom -->
+        </div>
+    </div>
+
+    <!-- /#page -->
+  
+    <!-- /#wrapper -->
+
+    <a id="scroll-top"></a>
+
+    <!-- Javascript -->
+
+    <script src="{% static 'lab/assets/js/jquery.min.js' %}"></script>
+    <script src="{% static 'lab/assets/js/jquery-validate.js' %}"></script>
+    <script src="{% static 'lab/assets/js/jquery.easing.js' %}"></script>
+    <script src="{% static 'lab/assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'lab/assets/js/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'lab/assets/js/plugin.js' %}"></script>
+    <script src="{% static 'lab/assets/js/shortcodes.js' %}"></script>
+    <script src="{% static 'lab/assets/js/main.js' %}"></script>
+    <script src="{% static 'lab/assets/js/swiper.js' %}"></script>
+    <script src="{% static 'lab/assets/js/countto.js' %}"></script>
+    <script src="{% static 'lab/assets/js/jquery.fancybox.js' %}"></script>
+    <script src="{% static 'lab/assets/js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'lab/assets/js/wow.min.js' %}"></script>
+
+</body>
+
+
+<!-- Mirrored from themesflat.co/html/labaidhtml/home2.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 28 Apr 2025 05:39:06 GMT -->
+</html>

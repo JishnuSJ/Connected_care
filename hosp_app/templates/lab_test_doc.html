@@ -1,0 +1,35 @@
+{% extends "doc_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doct lab</title>
+</head>
+<body>
+    <h1>Lab test</h1>
+    <h2>Select Lab Tests</h2>
+
+<h2>Select Lab Tests</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    
+    <div style="padding: 15px; background: #f8f8f8; border-radius: 10px;">
+        {% for value, label in form.selected_tests.field.choices %}
+            <div style="margin-bottom: 10px;">
+                <input type="checkbox" name="selected_tests" value="{{ value }}">
+                <label>{{ value }} - ₹{{ label }}</label>  <!-- ✅ Displays test name and price -->
+            </div>
+        {% endfor %}
+    </div>
+
+    <button type="submit" style="background-color: #007acc; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer;">
+        Submit Lab Tests
+    </button>
+</form>
+
+</body>
+</html>
+
+
+{% endblock %}

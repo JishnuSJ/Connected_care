@@ -1,0 +1,122 @@
+{% extends "doc_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Prescription</title>
+    <style>
+        .medicine-group {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #add-medicine {
+            background-color: #28a745;
+            color: white;
+            margin-right: 10px;
+        }
+
+        #add-medicine:hover {
+            background-color: #218838;
+        }
+
+        #submit-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add Prescription</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ formset.management_form }}
+
+        <div id="medicine-list">
+            {% for form in formset %}
+            <div class="medicine-group">
+                {% for field in form.visible_fields %}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div style="color:red;">{{ field.errors }}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" id="add-medicine">New Medicine</button>
+        <button type="submit" id="submit-btn">Save Prescription</button>
+    </form>
+
+    <script>
+        document.getElementById("add-medicine").addEventListener("click", function() {
+            var medicineList = document.getElementById("medicine-list");
+            var totalForms = document.querySelector('#id_form-TOTAL_FORMS');
+            var currentFormCount = parseInt(totalForms.value);
+
+            // Clone the first form group as template
+            var newForm = medicineList.children[0].cloneNode(true);
+
+            // Update all input/select/textarea and labels inside the cloned form
+            var inputs = newForm.querySelectorAll("input, select, textarea, label");
+
+            inputs.forEach(function(input) {
+                // Update input/select/textarea names and ids
+                if(input.name) {
+                    input.name = input.name.replace(/form-(\d+)-/, 'form-' + currentFormCount + '-');
+                }
+                if(input.id) {
+                    input.id = input.id.replace(/form-(\d+)-/, 'form-' + currentFormCount + '-');
+                }
+                if(input.tagName.toLowerCase() === 'label' && input.htmlFor) {
+                    input.htmlFor = input.htmlFor.replace(/form-(\d+)-/, 'form-' + currentFormCount + '-');
+                }
+
+                // Clear values for new form
+                if (input.tagName.toLowerCase() !== 'label') {
+                    if(input.type === 'checkbox' || input.type === 'radio'){
+                        input.checked = false;
+                    } else {
+                        input.value = '';
+                    }
+                }
+            });
+
+            medicineList.appendChild(newForm);
+            totalForms.value = currentFormCount + 1;
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

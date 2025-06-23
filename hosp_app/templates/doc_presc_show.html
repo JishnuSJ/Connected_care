@@ -1,0 +1,99 @@
+{% extends "doc_header.html" %}
+{% block content %}
+
+<h1>Doctor Prescriptions</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Patient ID</th>
+            <th>Patient</th>
+            <th>Hospital</th>
+            
+            <th>Medicine Name</th>
+            <th>Before/After Food</th>
+            <th>Time of Day</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Edit</th>
+            <th>Remove</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in appointments %}
+    {% if appointment.prescriptions.exists %}
+        {% for prescription in appointment.prescriptions.all %}
+            <tr>
+                {% if forloop.first %}
+                    <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.curr_date|date:"Y-m-d" }}</td>
+                    <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.pat_id.pr_number }}</td>
+                    <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.pat_id.name }}</td>
+                    <td rowspan="{{ appointment.prescriptions.count }}">{{ appointment.hosp_id.name }}</td>
+                {% endif %}
+                
+                <td>{{ prescription.medicine_name }}</td>
+                <td>{{ prescription.before_or_after_food }}</td>
+                <td>{{ prescription.time_of_day }}</td>
+                <td>{{ prescription.start_date|date:"Y-m-d" }}</td>
+                <td>{{ prescription.end_date|date:"Y-m-d" }}</td>
+                <td><a href="{% url 'edit_presc' prescription.id %}" class="edit-btn">Edit</a></td>
+                <td><a href="{% url 'delete_presc' prescription.id %}" class="delete-btn">Remove</a></td>
+            </tr>
+        {% endfor %}
+    {% comment %} {% else %}
+        <tr>
+            <td colspan="11">No prescriptions found for {{ appointment.pat_id.name }}</td>
+        </tr> {% endcomment %}
+    {% endif %}
+{% endfor %}
+
+            
+    </tbody>
+</table>
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .edit-btn {
+        background: linear-gradient(to right, #28a745, #218838);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .edit-btn:hover {
+        background: #218838;
+    }
+
+    .delete-btn {
+        background: linear-gradient(to right, #dc3545, #c82333);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .delete-btn:hover {
+        background: #c82333;
+    }
+</style>
+
+{% endblock %}

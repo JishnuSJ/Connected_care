@@ -1,0 +1,46 @@
+{% block content %}
+<html>
+    <head>
+        <title>Xray</title>
+    </head>
+    <body>
+        <form method="post" enctype="multipart/form-data">
+            <center>
+            {% csrf_token %}
+            <table border="1">
+                {% for field in form %}
+                    <tr>
+                        <td>{{ field.label }}:</td>
+                        <td>{{ field }}<br></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <button type="submit" class="styled-button">Submit</button>
+        </center>
+        </form>
+        {% if predicted_disease %}
+    <p>Predicted Disease: {{ predicted_disease }}</p>
+{% endif %}
+    </body>
+</html>
+{% endblock %}
+<style>
+    .styled-button {
+    background-color: #f3cea5; /* Green background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 15px 32px; /* Padding */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Inline block element */
+    font-size: 16px; /* Font size */
+    margin: 4px 2px; /* Margin */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.styled-button:hover {
+    background-color: #f3cea5; /* Darker green on hover */
+}
+</style>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skin Disease Chatbot</title>
+  <style>
+    :root {
+      --dark-green: #213321;
+      --green-1: #273e27;
+      --green-2: #2f4d2f;
+      --green-3: #3c603b;
+      --green-4: #517b4e;
+      --green-5: #789c74;
+      --green-6: #9fba9b;
+      --green-7: #c7d7c3;
+      --green-8: #e3ebe0;
+    }
+
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--green-8);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #chatContainer {
+      width: 95%;
+      max-width: 450px;
+      height: 90vh;
+      background: var(--green-7);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #chatOutput {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: var(--green-8);
+    }
+
+    #chatOutput p {
+      margin: 0;
+      padding: 12px 16px;
+      border-radius: 18px;
+      max-width: 75%;
+      word-wrap: break-word;
+      font-size: 14px;
+      line-height: 1.5;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideIn 0.4s forwards;
+    }
+
+    .user-message {
+      align-self: flex-end;
+      background-color: var(--green-4);
+      color: white;
+      text-align: right;
+    }
+
+    .bot-message {
+      align-self: flex-start;
+      background-color: var(--green-6);
+      color: #213321;
+      text-align: left;
+    }
+
+    .typing-indicator {
+      font-style: italic;
+      color: #666;
+      align-self: flex-start;
+    }
+
+    #inputContainer {
+      display: flex;
+      padding: 10px;
+      background: var(--green-7);
+      border-top: 1px solid var(--green-5);
+      gap: 10px;
+    }
+
+    #fileInput {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid var(--green-5);
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+    }
+
+    #sendButton {
+      background: var(--green-3);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0 20px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    #sendButton:hover {
+      background: var(--green-2);
+    }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="chatContainer">
+  <div id="chatOutput"></div>
+  <div id="inputContainer">
+    <input type="text" id="textInput" placeholder="Ask a health question..." />
+    <button id="sendButton">Send</button>
+  </div>
+</div>
+
+<script>
+const chatOutput = document.getElementById('chatOutput');
+const textInput  = document.getElementById('textInput');
+const sendButton = document.getElementById('sendButton');
+
+let inactivityTimer = null;  // Inactivity tracker
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    document.cookie.split(';').forEach(cookie => {
+      cookie = cookie.trim();
+      if (cookie.startsWith(name + '=')) {
+        cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
+      }
+    });
+  }
+  return cookieValue;
+}
+
+sendButton.addEventListener('click', () => {
+  const userMessage = textInput.value.trim();
+  if (!userMessage) return;
+
+  appendMessage(userMessage, 'user-message');
+  scrollBottom();
+  resetInactivityTimer();  // Reset timer when user sends message
+
+  const typing = appendTyping();
+  scrollBottom();
+
+  const formData = new FormData();
+  formData.append('question', userMessage);
+  formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+
+  fetch('/ask_health/', {
+    method: 'POST',
+    body: formData
+  })
+  .then(r => r.json())
+  .then(data => {
+    typing.remove();
+
+    if (data.error) {
+      appendMessage(`<span style="color:red;">${data.error}</span>`, 'bot-message');
+    } else {
+      showLineByLineStreaming(data.answer);
+    }
+
+    textInput.value = '';
+  })
+  .catch(err => {
+    typing.textContent = 'Sorry, something went wrong.';
+    console.error(err);
+  });
+});
+
+function appendMessage(message, className) {
+  const p = document.createElement('p');
+  p.className = className;
+  p.innerHTML = message;
+  chatOutput.appendChild(p);
+}
+
+function appendTyping() {
+  const typing = document.createElement('p');
+  typing.className = 'typing-indicator';
+  typing.textContent = 'Thinking...';
+  chatOutput.appendChild(typing);
+  return typing;
+}
+
+// ✅ Line-by-line streaming display function
+function showLineByLineStreaming(message) {
+  const p = document.createElement('p');
+  p.className = 'bot-message';
+  chatOutput.appendChild(p);
+
+  const lines = message.split('\n').filter(line => line.trim() !== '');
+  let currentLine = 0;
+
+  function showNextLine() {
+    if (currentLine < lines.length) {
+      p.innerHTML += lines[currentLine] + "<br>";
+      scrollBottom();
+      currentLine++;
+      setTimeout(showNextLine, 400);  // You can adjust typing speed here
+    }
+  }
+
+  showNextLine();
+}
+
+function scrollBottom() {
+  chatOutput.scrollTop = chatOutput.scrollHeight;
+}
+
+// Inactivity timer functions
+function resetInactivityTimer() {
+  if (inactivityTimer) clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(() => {
+    appendMessage("Do you need any other details or assistance?", 'bot-message');
+    scrollBottom();
+  }, 60000);  // 1 minute = 60000ms
+}
+
+// Start inactivity timer on page load
+window.onload = () => {
+  appendMessage("Welcome! Ask me any health-related question.", 'bot-message');
+  scrollBottom();
+  resetInactivityTimer();
+};
+</script>
+
+</body>
+
+</html>

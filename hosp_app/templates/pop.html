@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success Popup</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
+
+    <!-- Success Button to Trigger the Popup -->
+    <button onclick="showPopup()" style="background-color: #28a745; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);">
+        Book Appointment
+    </button>
+
+    <!-- Popup Modal -->
+    <div id="successPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; width: 90%; max-width: 400px; padding: 20px; border-radius: 10px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); text-align: center; z-index: 1000;">
+        <div style="padding: 20px;">
+            <h2 style="color: #28a745; margin-bottom: 10px;">Success!</h2>
+            <p style="font-size: 18px; color: #333; margin-bottom: 20px;">Your appointment has been taken successfully!</p>
+            <button onclick="closePopup()" style="background-color: #17a2b8; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);">Close</button>
+        </div>
+    </div>
+
+    <!-- Background Overlay -->
+    <div id="popupOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;" onclick="closePopup()"></div>
+
+    <!-- Inline JavaScript -->
+    <script>
+        function showPopup() {
+            document.getElementById('successPopup').style.display = 'block';
+            document.getElementById('popupOverlay').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('successPopup').style.display = 'none';
+            document.getElementById('popupOverlay').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

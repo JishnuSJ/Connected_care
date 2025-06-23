@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Settings</title>
+    <style>
+        body {
+            background: #f4f7fc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-container {
+            width: 400px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn {
+            width: 100%;
+            background-color: rgb(65, 202, 127);
+            border: none;
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: rgb(50, 170, 100);
+        }
+
+        .card-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-icons img {
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container">
+    <h2 class="card-title">Card Settings</h2>
+
+    <p style="font-size: 18px; font-weight: bold; color: #007acc;">
+    Total Price: ₹{% if total_price %}{{ total_price }}{% else %}0.00{% endif %}
+</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="card-name">Card Name</label>
+            <input type="text" id="card-name" name="card_name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="card-number">Card Number</label>
+            <input type="text" id="card-number" name="card_number" maxlength="16" required>
+        </div>
+
+        <div class="form-group">
+            <label for="exp-date">Expiry Date</label>
+            <input type="month" id="exp-date" name="exp" required>
+        </div>
+
+        <div class="form-group">
+            <label for="cvv">CVV</label>
+            <input type="password" id="cvv" name="cvv" maxlength="3" required>
+        </div>
+
+        <button class="btn"><b>Confirm Payment</b></button>
+    </form>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const validators = [];
+
+    function handleValidation(input, pattern, validMsg, invalidMsg) {
+        const feedback = document.createElement('small');
+        feedback.style.display = 'block';
+        input.parentNode.appendChild(feedback);
+
+        function validate() {
+            const value = input.value.trim();
+            if (!value) {
+                feedback.textContent = '❌ This field is required';
+                feedback.style.color = 'red';
+                return false;
+            } else if (!pattern.test(value)) {
+                feedback.textContent = '❌ ' + invalidMsg;
+                feedback.style.color = 'red';
+                return false;
+            } else {
+                feedback.textContent = '✅ ' + validMsg;
+                feedback.style.color = 'green';
+                return true;
+            }
+        }
+
+        input.addEventListener('input', validate);
+        validators.push(validate);
+    }
+
+    // ✅ Card Name Validation (letters and spaces only)
+    const cardNameInput = document.querySelector('input[name="card_name"]');
+    if (cardNameInput) {
+        handleValidation(
+            cardNameInput,
+            /^[A-Za-z ]+$/,
+            'Valid card name',
+            'Card name must contain only letters and spaces'
+        );
+    }
+
+    // ✅ Card Number Validation (16-digit number)
+    const cardNumberInput = document.querySelector('input[name="card_number"]');
+    if (cardNumberInput) {
+        handleValidation(
+            cardNumberInput,
+            /^\d{16}$/,
+            'Valid card number',
+            'Card number must be exactly 16 digits'
+        );
+    }
+
+    // ✅ Expiry Date Validation (Valid future date)
+    const expDateInput = document.querySelector('input[name="exp"]');
+    if (expDateInput) {
+        expDateInput.addEventListener('input', function () {
+            const today = new Date();
+            const selectedDate = new Date(expDateInput.value + "-01");
+
+            if (selectedDate < today) {
+                expDateInput.nextElementSibling.textContent = '❌ Expiry date must be in the future';
+                expDateInput.nextElementSibling.style.color = 'red';
+            } else {
+                expDateInput.nextElementSibling.textContent = '✅ Valid expiry date';
+                expDateInput.nextElementSibling.style.color = 'green';
+            }
+        });
+    }
+
+    // ✅ CVV Validation (3-digit number)
+    const cvvInput = document.querySelector('input[name="cvv"]');
+    if (cvvInput) {
+        handleValidation(
+            cvvInput,
+            /^\d{3}$/,
+            'Valid CVV',
+            'CVV must be exactly 3 digits'
+        );
+    }
+
+    // Prevent form submission if any validation fails
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+            validators.forEach(validateFn => {
+                if (!validateFn()) isValid = false;
+            });
+            if (!isValid) {
+                e.preventDefault();
+                alert("❌ Please fill all required fields and fix validation errors.");
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>

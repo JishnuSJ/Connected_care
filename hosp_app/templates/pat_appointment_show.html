@@ -1,0 +1,59 @@
+
+{% extends "pat_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body style="padding: 20px; font-family: Arial, sans-serif;">
+    <div class="container">
+        <h2 class="text-center">Appointments</h2>
+        <table class="table table-striped" style="margin-top: 20px;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Patient</th>
+                    <th scope="col">Doctor</th>
+                    <th scope="col">Hospital</th>
+                    <th scope="col">Cancel appointment</th>
+                    <th scope="col">Connect to Doctor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointment_show %}
+                <tr>
+                    <td>{{ appointment.book_date }}</td>
+                    <td>{{ appointment.book_time }}</td>
+                    <td>{{ appointment.pat_id.name }}</td>
+                    <td>{{ appointment.doc_id.name }}</td>
+                    <td>{{ appointment.hosp_id.name }}</td>
+                    <td><a href="cancel_appa/{{appointment.id}}">Cancel</a></td>
+                   {% if appointment.appointment_type == "Online" and appointment.url %}
+                        <td><a href="{{appointment.url}}" class="btn btn-primary">Video Call</a></td>
+                    {% elif appointment.appointment_type == "Online" and not appointment.url %}
+                        <td>Not Connected</td>
+                    {% else %}
+                        <td>Offline Appointment</td>
+                    {% endif %}
+                    <td><a href="{% url 'generate_appointment_pdf' appointment.id %}" class="btn btn-success">
+                        Download PDF
+                    </a></td>
+                    
+                
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No appointments found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+{% endblock %}

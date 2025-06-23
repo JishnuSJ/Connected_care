@@ -1,0 +1,67 @@
+{% extends "lab_header.html" %}
+{% block content %}
+<div class="lab-profile">
+    <h2 class="profile-title">Lab Profile</h2>
+
+    <div class="profile-card">
+        <p><strong>Lab Name:</strong> {{ lab_data.name }}</p>
+        <p><strong>Location:</strong> {{ lab_data.loc }}</p>
+        <p><strong>Affiliated Hospital:</strong> {{ lab_data.hosp_id.name }}</p>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+
+    <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+</div>
+
+<style>
+    .lab-profile {
+        width: 60%;
+        margin: auto;
+        text-align: center;
+    }
+
+    .profile-card {
+        background: rgba(255, 255, 255, 0.95); /* ✅ Slight transparency for better contrast */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        display: inline-block;
+        text-align: left;
+        width: 70%;
+    }
+
+    .profile-title {
+        font-size: 24px;
+        color: #333; /* ✅ Changed to a darker shade for better visibility */
+        margin-bottom: 20px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* ✅ Text shadow to improve readability */
+    }
+
+    p {
+        color: #222; /* ✅ Adjusted text color for better contrast */
+    }
+</style>
+
+{% endblock %}

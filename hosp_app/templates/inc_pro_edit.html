@@ -1,0 +1,176 @@
+{% extends "ins_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Insurance Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .insurance-form {
+            width: 50%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .input-label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .readonly-input {
+            background: #f4f4f4;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .submit-btn {
+            background: #007acc;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #005f99;
+        }
+
+        small {
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="insurance-form">
+    <h2 class="form-title">Update Insurance Profile</h2>
+<br><br>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="input-group">
+            <label class="input-label">Insurance ID:</label>
+            <input type="text" name="inc_id" class="input readonly-input" value="{{ form1.instance.inc_id }}" readonly>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Agent Name:</label>
+            <input type="text" name="agent_name" class="input" value="{{ form1.instance.agent_name }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Contact Number:</label>
+            <input type="tel" name="contact" class="input" value="{{ form1.instance.contact }}" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Email:</label>
+            <input type="email" name="email" class="input" value="{{ form2.instance.email }}" required>
+        </div>
+
+        <button type="submit" class="submit-btn">Update Profile</button>
+    </form>
+</div>
+<br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const validators = [];
+
+    function handleValidation(input, pattern, validMsg, invalidMsg) {
+        const feedback = document.createElement('small');
+        feedback.style.display = 'block';
+        input.parentNode.appendChild(feedback);
+
+        function validate() {
+            const value = input.value.trim();
+            if (!value) {
+                feedback.textContent = '❌ This field is required';
+                feedback.style.color = 'red';
+                return false;
+            } else if (!pattern.test(value)) {
+                feedback.textContent = '❌ ' + invalidMsg;
+                feedback.style.color = 'red';
+                return false;
+            } else {
+                feedback.textContent = '✅ ' + validMsg;
+                feedback.style.color = 'green';
+                return true;
+            }
+        }
+
+        input.addEventListener('input', validate);
+        validators.push(validate);
+    }
+
+    const agentNameInput = document.querySelector('input[name="agent_name"]');
+    if (agentNameInput) {
+        handleValidation(agentNameInput, /^[A-Za-z ]+$/, 'Valid agent name', 'Name must contain only letters and spaces');
+    }
+
+    const contactInput = document.querySelector('input[name="contact"]');
+    if (contactInput) {
+        handleValidation(contactInput, /^\d{10}$/, 'Valid phone number', 'Enter a valid 10-digit phone number');
+    }
+
+    const emailInput = document.querySelector('input[name="email"]');
+    if (emailInput) {
+        handleValidation(emailInput, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Valid email address', 'Enter a valid email address');
+    }
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+            validators.forEach(validateFn => {
+                if (!validateFn()) isValid = false;
+            });
+            if (!isValid) {
+                e.preventDefault();
+                alert("❌ Please fill all required fields and fix validation errors.");
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>
+{% endblock %}

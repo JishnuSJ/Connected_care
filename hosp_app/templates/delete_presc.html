@@ -1,0 +1,9 @@
+<h1>Are you sure you want to delete this appointment?</h1>
+<p>Patient: {{ prescription.appointment.pat_id.name }}</p>
+<p>Appointment Date: {{ prescription.appointment.book_date }}</p>
+<p>Appointment Time: {{ prescription.appointment.book_time }}</p>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit" style="background-color: red; color: white; padding: 10px 20px; border: none;">Yes, Delete</button>
+    <a href="{% url 'doc_presc_show' %}" style="text-decoration: none; padding: 10px 20px; background-color: #ccc; color: black; border: none;">Cancel</a>
+</form>

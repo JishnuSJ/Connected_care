@@ -1,0 +1,36 @@
+{% extends "doc_header.html" %}
+{% block content %}
+<body>
+
+<h2>Lab list</h2>
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for i in a %}
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Labs Name.{{ i.name }}</h5>
+          <h5 class="card-title">Labs Location{{ i.loc }}</h5>
+          
+          
+          
+          
+          <a href="../lab_test_doc/{{app_id.id}}/{{i.id}}" class="btn btn-info">
+           Appointment
+        </a>
+        
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+   
+
+
+</body>
+<style>
+  .footer{
+    width:-webkit-fill-available;
+  }
+</style>
+{% endblock %}

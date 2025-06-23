@@ -1,0 +1,16 @@
+
+{% extends "lab_header.html" %}
+{% block content %}
+<h2>Edit Lab Report</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    
+    <label>Enter Lab Report Details:</label>
+    <textarea name="report_given" rows="5" cols="50">{{ labtest.report_given }}</textarea><br><br>
+
+    <button type="submit" style="background: linear-gradient(to right, #007acc, #005f99); color: white; padding: 10px 20px; border-radius: 8px;">
+        Save Changes
+    </button>
+</form>
+{% endblock %}

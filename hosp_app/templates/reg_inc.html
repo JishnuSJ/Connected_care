@@ -1,0 +1,186 @@
+{% extends "index_header.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Register</title>
+
+    <style>
+        /* ✅ Center the form */
+        .signup-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f4f7fc;
+        }
+
+        .signup-form {
+            width: 60%;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* ✅ Improve Input Fields */
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background: #fff;
+        }
+
+        /* ✅ Profile Image */
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            margin: auto;
+            border: 3px solid #007acc;
+        }
+
+        /* ✅ Submit Button */
+        .submit-btn {
+            background: #007acc;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #005f99;
+        }
+    </style>
+</head>
+<body>
+
+<div class="signup-container">
+    <div class="signup-form">
+        <h2 class="form-title">Insurance Register</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+                {{ form1.as_p }}
+            </div>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const validators = [];
+
+    function handleValidation(input, pattern, validMsg, invalidMsg) {
+        const feedback = document.createElement('small');
+        feedback.style.display = 'block';
+        input.parentNode.appendChild(feedback);
+
+        function validate() {
+            const value = input.value.trim();
+            if (!value) {
+                feedback.textContent = '❌ This field is required';
+                feedback.style.color = 'red';
+                return false;
+            } else if (!pattern.test(value)) {
+                feedback.textContent = '❌ ' + invalidMsg;
+                feedback.style.color = 'red';
+                return false;
+            } else {
+                feedback.textContent = '✅ ' + validMsg;
+                feedback.style.color = 'green';
+                return true;
+            }
+        }
+
+        input.addEventListener('input', validate);
+        validators.push(validate);
+    }
+
+    // ✅ Name validation (letters and spaces only)
+    const nameInput = document.querySelector('input[name="name"]');
+    if (nameInput) {
+        handleValidation(nameInput, /^[A-Za-z ]+$/, 'Valid name', 'Name must contain only letters and spaces');
+    }
+
+    // ✅ Contact validation (10 digits)
+    const contactInput = document.querySelector('input[name="contact"]');
+    if (contactInput) {
+        handleValidation(contactInput, /^\d{10}$/, 'Valid phone number', 'Enter a valid 10-digit phone number');
+    }
+
+    // ✅ Email validation
+    const emailInput = document.querySelector('input[name="email"]');
+    if (emailInput) {
+        handleValidation(emailInput, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Valid email address', 'Enter a valid email address');
+    }
+
+    // ✅ Password validation (min 8 chars, upper, lower, number, special char)
+    const passwordInput = document.querySelector('input[name="password"]');
+    if (passwordInput) {
+        handleValidation(passwordInput, /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/, 'Strong password', 'Password must be at least 8 characters, include uppercase, lowercase, a number, and a special character');
+    }
+
+    // Real-time required fields validation
+    const requiredFields = ['District', 'City', 'Register_no'];
+    requiredFields.forEach(fieldName => {
+        const input = document.querySelector(`[name="${fieldName}"]`);
+        if (input) {
+            const feedback = document.createElement('small');
+            feedback.style.display = 'block';
+            input.parentNode.appendChild(feedback);
+
+            input.addEventListener('input', function () {
+                feedback.textContent = input.value.trim() === '' ? '❌ This field is required' : '';
+                feedback.style.color = input.value.trim() === '' ? 'red' : '';
+            });
+        }
+    });
+
+    // Prevent form submission if any validation fails
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+            validators.forEach(validateFn => {
+                if (!validateFn()) isValid = false;
+            });
+            if (!isValid) {
+                e.preventDefault();
+                alert("❌ Please fill all required fields and fix validation errors.");
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>
+{% endblock %}

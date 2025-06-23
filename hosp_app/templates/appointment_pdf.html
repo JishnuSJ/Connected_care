@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 30px;
+        }
+        .header {
+            text-align: center;
+            padding: 10px;
+            border-bottom: 2px solid #333;
+        }
+        .details {
+            margin-top: 30px;
+        }
+        .details h3 {
+            color: #2c3e50;
+        }
+        .field {
+            margin: 10px 0;
+        }
+        .label {
+            font-weight: bold;
+            display: inline-block;
+            width: 180px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Appointment Details</h1>
+    </div>
+    <div class="details">
+        <div class="field"><span class="label">Patient Name:</span> {{ appointment.pat_id.name }}</div>
+        <div class="field"><span class="label">Patient ID:</span> {{ appointment.pat_id.pr_number }}</div>
+        <div class="field"><span class="label">Doctor Name:</span> {{ appointment.doc_id.name }}</div>
+        <div class="field"><span class="label">Hospital Name:</span> {{ appointment.hosp_id.name }}</div>
+        <div class="field"><span class="label">Date:</span> {{ appointment.book_date }}</div>
+        <div class="field"><span class="label">Time:</span> {{ appointment.book_time }}</div>
+    </div>
+</body>
+</html>
